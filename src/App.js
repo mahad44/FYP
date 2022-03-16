@@ -7,6 +7,7 @@ import MyGroup from './pages/MyGroup';
 import FacultyList from './pages/FacultyList';
 import Navbar from './Components/Navbar';
 import Peers from './pages/Peers';
+import UserDetails from './pages/UserDetails';
 
 
 function App() {
@@ -31,6 +32,9 @@ function App() {
         </Route>
         <Route path="/peers">
           <Peers/>
+        </Route>
+        <Route path="/users/:userId">
+          <UserDetails/>
         </Route>
         {!localStorage.getItem("token") && <Route path="/">
           <Login/>

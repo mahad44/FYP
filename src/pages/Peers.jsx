@@ -3,11 +3,12 @@ import { Card } from 'react-bootstrap';
 import { fetchStudents } from './../API calls/users';
 import { Button } from 'react-bootstrap';
 import Spinner from './../Components/Spinner';
+import {withRouter} from 'react-router-dom';
 
 
 
 
-const Peers = () => {
+const Peers = ({history}) => {
 
     // const [users,setUsers] = useState([]);
     const[studentList,setStudentList] = useState([]);
@@ -55,13 +56,13 @@ const Peers = () => {
                             
                             <div className="col-12 col-sm-6 d-flex justify-content-center  col-lg-4 col-xl-4 mb-5 mt-2">
                                 <Card bg="dark" text="light" border="light" style={{ width: '18rem', marginTop: "65px", marginBottom:"10px"}}>
-                                <Card.Img style={{width: "100%", height: "10vw"}} variant="top" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/640px-User_icon_2.svg.png" />
+                                <Card.Img  variant="top" src="https://media-exp1.licdn.com/dms/image/C4E03AQEJO6VffaNfoA/profile-displayphoto-shrink_200_200/0/1610983771633?e=1652313600&v=beta&t=89k6G3s9LTVaax5TOu1HMG1odHDn40jg3meUJ0Myw5I" />
                                 <Card.Body>
                                     <Card.Title>{std.username.toUpperCase()}</Card.Title>
                                     <Card.Text>
                                         A rising senior. Possesses great interest and talent interest in machine learning, web development & AI.
                                     </Card.Text>
-                                    <Button variant="primary">Visit Profile</Button>
+                                    <Button onClick={()=>history.push(`/users/${std.userId}`)} variant="primary">Visit Profile</Button>
                                 </Card.Body>
                                 </Card>
 
@@ -80,4 +81,4 @@ const Peers = () => {
      );
 }
  
-export default Peers;
+export default withRouter(Peers);
