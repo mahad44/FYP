@@ -30,7 +30,7 @@ const Peers = ({history}) => {
             setResponseRecieved(true);
             // setError(true);
           });
-    });
+    },[]);
 
 // Use the line below to include dependancy array
 // }, []);

@@ -1,25 +1,70 @@
 import "./css/mygroup.css";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { withRouter } from "react-router-dom";
 import { Form,Button } from "react-bootstrap";
 import Input from "../Components/Input";
+import {create, fetchGroup} from "../API calls/group";
+import StudentGroup from './../Components/StudentGroup';
 
-const MyGroup = () => {
+const MyGroup = ({history}) => {
 
     const [groupName,setGroupName] = useState("");
     const [groupDescription, setGroupDescription] = useState("");
+    const [groupDetails,setGroupDetails] = useState({});
+    var userProfile = JSON.parse(localStorage.getItem('studentProfile'));
+
+    useEffect(()=>{
+        if(userProfile.groupId !== null || userProfile.groupId !== ""){
+            
+            fetchGroup(userProfile.groupId)
+            .then(response=>{
+                if(response.status!== 200){
+                    console.log(response)
+                }
+                else{
+                    localStorage.setItem("groupDetails",JSON.stringify(response.data.data.group))
+                    setGroupDetails(response.data.data.group);
+                    console.log(response.data.data);
+                }
+            })
+        }
+    },[])
+
+    
 
     const submit = async e => {
+        e.preventDefault();
+
+        let data = {
+            name: groupName,
+            description: groupDescription
+        }
+
+        create(data)
+        .then(response => {
+            // var user = JSON.parse(localStorage.getItem('user'));
+            if(response.status !== 200 ){
+                alert('Unable to create the group !')
+            }
+            else{
+                // localStorage.setItem
+                // user.grou
+                var userProfile = JSON.parse(localStorage.getItem('studentProfile'));
+                userProfile.groupId = response.data.data.group._id;
+                localStorage.setItem("studentProfile",JSON.stringify(userProfile)) ;
+                console.log(response.data.data);
+                history.push("home");
+
+            }
+        })
         
     };
+
 
     return ( 
         <>
         <div className="container mt-5">
-            {localStorage.getItem("groupId") ==null ? 
-            // <div className="noGroupBox w-25 mt-5 rounded">
-            //     <h2 style={{color: "white"}}>You do not have a group yet</h2>
-            //     <button style={{marginTop: "5px",marginBottom: "5px", backgroundColor: "#2f4f4f"}} onClick={()=>window.location="./createGroup"} className="btn btn-dark">Create Group</button>
-            // </div>
+            {userProfile.groupId ==null || userProfile.groupId==="" ? 
             <div>
                 <h1>
                     You do not have a group yet ...
@@ -64,7 +109,10 @@ const MyGroup = () => {
             </div>
             : 
             <div>
-                Here is your group : 
+                <h1>
+                    Here is your group !
+                </h1>
+                <StudentGroup details={groupDetails} />
             </div>
             }
         </div>
@@ -72,4 +120,4 @@ const MyGroup = () => {
      );
 }
  
-export default MyGroup;
+export default withRouter(MyGroup);

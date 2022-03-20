@@ -16,5 +16,5 @@ export const fetchStudents = async data =>
     await axios.get(`http://localhost:5000/users/fetchStudentList`, header);
 
 //fetches the profile of user
-export const fetchUser = async userId =>
-    await axios.get(`http://localhost:5000/users/fetchUser/${userId}`, header);
+export const fetchUser = async (data,userId) =>
+    await axios.post(`http://localhost:5000/users/fetchUser/${userId}`,data, header);

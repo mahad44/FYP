@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import {useParams} from 'react-router';
 import Image from 'react-bootstrap/Image';
+import { createRequest } from '../API calls/request';
 import { fetchUser } from "../API calls/users";
 import Spinner from './../Components/Spinner';
 import '../pages/css/userDetail.css';
@@ -13,21 +14,51 @@ const UserDetails = () => {
     const [user,setUser] = useState([]);
     const [profile,setProfile] = useState([]);
     const [responseRecieved, setResponseRecieved] = useState(false);
+    const [requestSent,setRequestSent] = useState(false);
+    var userProfile = JSON.parse(localStorage.getItem('studentProfile'));
     
 
     useEffect(() => {
-        fetchUser(userId)
+        let data = {
+            groupId: userProfile.groupId
+        }
+        fetchUser(data,userId)
           .then(response => {
             setResponseRecieved(true);
             setUser(response.data.data.user);
             setProfile(response.data.data.studentUser);
+            setRequestSent(response.data.data.sentRequest)
+            console.log("RESPONSE BELOW");
             console.log(response.data.data);
+
           })
           .catch(err => {
             setResponseRecieved(true);
             // setError(true);
           });
     }, []);
+
+    const sendRequest = async => {
+        console.log("button clicked");
+        let data = {
+            groupId: userProfile.groupId,
+            recieverId: user._id,
+            requestType: "peer",
+            proposalFile: "",
+            message: "hey"
+        }
+
+        createRequest(data)
+        .then(response=> {
+            if(response.status !== 200){
+                alert('Unable to send request');
+            }
+            else{
+                setRequestSent(true);
+
+            }
+        })
+    }
 
     return ( 
         <>
@@ -52,9 +83,12 @@ const UserDetails = () => {
                     </h2>
                 </div>
                 <div className="col-3 p-5 mt-3">
-                    <button className='btn btn-light btn-lg'>
+                    {requestSent === false ? <button onClick={sendRequest} className='btn btn-light btn-lg'>
                         Send Request
-                    </button> 
+                    </button> : 
+                    <button disabled className='btn btn-info btn-lg'>
+                        Sent
+                    </button> }
                 </div>
             </div>
             <div className="row bg-dark">

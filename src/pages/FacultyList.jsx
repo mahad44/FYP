@@ -14,6 +14,9 @@ const FacultyList = ({history}) => {
     useEffect(() => {
         fetchFaculty()
           .then(response => {
+            if(response.status!==200){
+              alert("Unable to fetch faculty profiles")
+            }
             setResponseRecieved(true);
             setUsers(response.data.data.users);
             setFaculty(response.data.data.facultyUsers);
