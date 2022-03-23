@@ -37,6 +37,7 @@ const FacultyList = ({history}) => {
         {
            responseRecieved && faculty.length !==0 && faculty.map(professor=>(
             <FacultyCard
+            id={professor.userId}
             key={professor._id}
             name={professor.username}
             image={users.filter(user=> user._id === professor.userId).image}

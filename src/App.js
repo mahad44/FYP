@@ -8,6 +8,8 @@ import FacultyList from './pages/FacultyList';
 import Navbar from './Components/Navbar';
 import Peers from './pages/Peers';
 import UserDetails from './pages/UserDetails';
+import ViewRequests from './pages/ViewRequests';
+import FacultyProfile from './pages/FacultyProfile';
 
 
 function App() {
@@ -27,11 +29,17 @@ function App() {
         <Route path="/createGroup">
           <CreateGroup/>
         </Route>
+        <Route path="/faculty/:facultyId">
+          <FacultyProfile/>
+        </Route>
         <Route path="/faculty">
           <FacultyList/>
         </Route>
         <Route path="/peers">
           <Peers/>
+        </Route>
+        <Route path="/requests/:userId">
+          <ViewRequests/>
         </Route>
         <Route path="/users/:userId">
           <UserDetails/>

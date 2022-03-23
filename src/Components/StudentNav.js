@@ -2,6 +2,11 @@ import { NavLink, withRouter } from "react-router-dom";
 
 
 const StudentNav = props => {
+
+  
+  var user = JSON.parse(localStorage.getItem('user'));
+  var userProfile = JSON.parse(localStorage.getItem('studentProfile'));
+
   return (
     <>
         <button
@@ -32,7 +37,7 @@ const StudentNav = props => {
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink className="nav-link" to="/request">
+                    <NavLink className="nav-link" to={`/requests/${userProfile.groupId}`}>
                         Requests
                     </NavLink>
                 </li>
