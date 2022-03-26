@@ -1,3 +1,5 @@
+import HomeComponent from './../Components/HomeComponent';
+
 const Home = () => {
 
     var user = JSON.parse(localStorage.getItem('user'));
@@ -5,9 +7,8 @@ const Home = () => {
 
     return ( 
         <>
-        <div className="container mt-5">
-            <h1>Home Page - Hello {user.username}</h1>
-        </div>
+        
+            <HomeComponent/>
         </>
      );
 }
