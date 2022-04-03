@@ -38,7 +38,7 @@ function App() {
         <Route path="/peers">
           <Peers/>
         </Route>
-        <Route path="/requests/:userId">
+        <Route path="/requests">
           <ViewRequests/>
         </Route>
         <Route path="/users/:userId">

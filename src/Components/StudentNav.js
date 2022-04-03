@@ -37,7 +37,7 @@ const StudentNav = props => {
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink className="nav-link" to={`/requests/${userProfile.groupId}`}>
+                    <NavLink className="nav-link" to={`/requests`}>
                         Requests
                     </NavLink>
                 </li>
