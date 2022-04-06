@@ -12,9 +12,14 @@ const clearLocalMemory = () => {
   
   const saveToLocalMemory = data => {
     localStorage.setItem("user", JSON.stringify(data.user));
-    localStorage.setItem("studentProfile", JSON.stringify(data.studentProfile));
+    if(data.user.roleType==="student"){
+      localStorage.setItem("profile", JSON.stringify(data.studentProfile));
+    }
+    else{
+      localStorage.setItem("profile", JSON.stringify(data.facultyProfile));
+    }
     localStorage.setItem("token", data.token);
-    localStorage.setItem("userType", data.userType);
+    localStorage.setItem("userType", data.user.roleType);
   };
 
 const Login = () => {

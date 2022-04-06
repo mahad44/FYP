@@ -1,7 +1,7 @@
 import { NavLink, withRouter } from "react-router-dom";
 
 
-const StudentNav = props => {
+const FacultyNav = props => {
 
   
   var user = JSON.parse(localStorage.getItem('user'));
@@ -27,28 +27,18 @@ const StudentNav = props => {
             
             <ul className="navbar-nav text-center"  style={{marginRight: "30px"}}>
                 <li className="nav-item">
-                    <NavLink className="nav-link" to="/mygroup">
-                        My Group
+                    <NavLink className="nav-link" to="/mygroups">
+                        My Groups
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink className="nav-link" to="/faculty">
-                        Faculty
-                    </NavLink>
-                </li>
-                <li className="nav-item">
-                    <NavLink className="nav-link" to={`/requests`}>
+                    <NavLink className="nav-link" to="/requests">
                         Requests
                     </NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink className="nav-link" to="/project">
-                        Project
-                    </NavLink>
-                </li>
-                <li className="nav-item">
-                    <NavLink className="nav-link" to="/peers">
-                        Peers
+                    <NavLink className="nav-link" to="/asdasda">
+                        Coordinator
                     </NavLink>
                 </li>
                 <li>
@@ -67,4 +57,4 @@ const StudentNav = props => {
   );
 };
 
-export default withRouter(StudentNav);
+export default withRouter(FacultyNav);

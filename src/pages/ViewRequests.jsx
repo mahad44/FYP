@@ -1,21 +1,24 @@
 
-import { useParams } from 'react-router';
+// import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-import { fetchSentRequests, fetchRecievedRequests } from '../API calls/request';
+import { fetchSentRequests, fetchRecievedRequests, acceptRequest } from '../API calls/request';
 import RequestCard from '../Components/RequestCard';
 import Spinner from './../Components/Spinner';
 import { cancelRequest } from './../API calls/request';
+import { withRouter } from 'react-router-dom';
 
 
-const ViewRequests = () => {
+const ViewRequests = ({history}) => {
 
-    var userProfile = JSON.parse(localStorage.getItem('studentProfile'));
+    var userProfile = JSON.parse(localStorage.getItem('profile'));
     const userId = userProfile.groupId;
     const [requests,setRequests] = useState([]);
     const [recievedRequests, setRecievedRequests] = useState([]);
     const [responseRecieved, setResponseRecieved] = useState(false);
-    const [sent,setSent] = useState(true);
-    const [recieved,setRecieved] = useState(true);
+    // const [sent,setSent] = useState(true);
+    // const [recieved,setRecieved] = useState(true);
+    const [selectedRequestType, setSelectedRequestType] = useState("Sent");
+    let options = ["Sent","Recieved"];
 
 
 
@@ -54,7 +57,35 @@ const ViewRequests = () => {
             console.log("ERROR")
             // setError(true);
           });
-    },[]);
+    },[userId,userProfile.userId]);
+
+    const accept = requestId => {
+        let oldRecievedRequests = [...recievedRequests];
+        let newRecievedRequests = recievedRequests.filter(req=> req._id!== requestId);
+        let thisRequest = oldRecievedRequests.find(element=>element._id === requestId);
+        let newRequest = {...thisRequest};
+        newRequest.status="accepted";
+        let updatedRecievedRequests = [...newRecievedRequests,newRequest];
+        setRecievedRequests(updatedRecievedRequests);
+
+        acceptRequest(requestId)
+        .then(response=>{
+            if(!response.data.data.actionPerformedSuccessfully){
+                setRequests(oldRecievedRequests);
+                alert('Sorry! Unable to accept the request.');
+            }
+            else{
+                let newUserProfile = {...userProfile};
+                newUserProfile.groupId = response.data.data.newGroupId;
+                localStorage.setItem("profile", JSON.stringify(newUserProfile));
+                history.push("/mygroup");
+            }
+        })
+        .catch(error=>{
+            setRequests(oldRecievedRequests);
+            alert('Sorry! Unable to accept the request.');
+        })
+    }
 
     const remove = requestId => {
 
@@ -79,10 +110,10 @@ const ViewRequests = () => {
         })
     } 
 
-    const toggle = () => {
-        setSent(!sent);
-        setRecieved(!recieved);
-    }
+    // const toggle = () => {
+    //     setSent(!sent);
+    //     setRecieved(!recieved);
+    // }
 
     return ( 
         <>
@@ -94,26 +125,43 @@ const ViewRequests = () => {
             <h1>
                 Your Requests ...
             </h1>
-            <button className="btn btn-primary">Sent</button>
-            <button onClick={()=>toggle()} className="btn btn-primary">Recieved</button>
-
+            {/* <button className="btn btn-primary">Sent</button>
+            <button onClick={()=>toggle()} className="btn btn-primary">Recieved</button> */}
+            
 
             <div className="mt-5" >
 
-            <div className="row align-items w-75 m-2 center mb-3" style={{textAlign: "center"}}>
+            <div className='row d-flex justify-content-end w-75 m-2  mb-5'>
+                <select className='form-select w-25' value={selectedRequestType} onChange={(e) => setSelectedRequestType(e.target.value)} name="requestType" id="0">
+                    {options.map(opt=> <option value={opt}>{opt}</option>)}
+                </select> 
+            </div>
+
+            {((selectedRequestType==="Sent" && requests.length>0) || (selectedRequestType === "Recieved" && recievedRequests.length>0)) &&<div className="row align-items w-75 m-2 center mb-3" style={{textAlign: "center"}}>
                 <div className="col-3"><h5>Request Type</h5></div>
                 <div className="col-3"><h5>Detail</h5></div>
                 <div className="col-3"><h5>Actions</h5></div>
                 <div className="col-3"><h5>Status</h5></div>
-            </div>
-            {responseRecieved && sent ?
+            </div>}
+            {/* {responseRecieved && selectedRequestType==="Sent" ? 
             requests.map(req=> <RequestCard id={req._id} recieverId={req.recieverId} onCancel={remove} type={req.type} status={req.status} recieverName={req.recieverName} />
             ) :
 
             recievedRequests.map(req=> <RequestCard id={req._id} recieverId={req.recieverId} onCancel={remove} type={req.type} status={req.status} recieverName={req.recieverName} />
             )
 
-            }
+            } */}
+            {responseRecieved && selectedRequestType==="Sent" &&
+            requests.map(req=> <RequestCard id={req._id} recieverId={req.recieverId} onCancel={remove} type={req.type} status={req.status} senderId={req.senderId} senderName={req.senderName} recieverName={req.recieverName} />
+            )}
+
+            {responseRecieved && selectedRequestType==="Recieved" && 
+            recievedRequests.map(req=> <RequestCard id={req._id} recieverId={req.recieverId} onCancel={remove} onAccept={accept} type={req.type} status={req.status} senderId={req.senderId} senderName={req.senderName} recieverName={req.recieverName} />
+            )}
+
+            {responseRecieved && selectedRequestType==="Sent" && requests.length ===0 && <h2 className='text-danger'>No requests sent yet.</h2>}
+            {responseRecieved && selectedRequestType==="Recieved" && recievedRequests.length ===0 && <h2 className='text-danger'>No requests recieved yet.</h2>}
+
             </div>
         </div>
         </> 
@@ -126,4 +174,4 @@ const ViewRequests = () => {
      );
 }
  
-export default ViewRequests;
+export default withRouter(ViewRequests);

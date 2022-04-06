@@ -4,18 +4,19 @@ import Image from 'react-bootstrap/Image';
 import { createRequest } from '../API calls/request';
 import { fetchUser } from "../API calls/users";
 import Spinner from './../Components/Spinner';
+import { withRouter } from 'react-router-dom';
 import '../pages/css/userDetail.css';
 
 
 
-const UserDetails = () => {
+const UserDetails = ({history}) => {
 
     const {userId} = useParams();
     const [user,setUser] = useState([]);
     const [profile,setProfile] = useState([]);
     const [responseRecieved, setResponseRecieved] = useState(false);
     const [requestSent,setRequestSent] = useState(false);
-    var userProfile = JSON.parse(localStorage.getItem('studentProfile'));
+    var userProfile = JSON.parse(localStorage.getItem('profile'));
     
 
     useEffect(() => {
@@ -82,14 +83,18 @@ const UserDetails = () => {
                         BSCS Senior
                     </h2>
                 </div>
-                <div className="col-3 p-5 mt-3">
+                {userProfile.groupId ? <div className="col-3 p-5 mt-3">
                     {requestSent === false ? <button onClick={sendRequest} className='btn btn-light btn-lg'>
                         Send Request
                     </button> : 
                     <button disabled className='btn btn-info btn-lg'>
                         Sent
                     </button> }
-                </div>
+                </div>:
+                <div className="col-3 p-5 mt-3" >
+                    <button onClick={()=>history.push("/mygroup")} className='btn btn-light btn-lg'>Create Group <i class="fa-solid fa-users-line fa-lg"></i> </button>
+                </div> 
+                }
             </div>
             <div className="row bg-dark">
                 <div className="col-6 border p-5 bg-dark text-light">
@@ -140,4 +145,4 @@ const UserDetails = () => {
      );
 }
  
-export default UserDetails;
+export default withRouter(UserDetails);

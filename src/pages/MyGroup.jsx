@@ -11,10 +11,10 @@ const MyGroup = ({history}) => {
     const [groupName,setGroupName] = useState("");
     const [groupDescription, setGroupDescription] = useState("");
     const [groupDetails,setGroupDetails] = useState({});
-    var userProfile = JSON.parse(localStorage.getItem('studentProfile'));
+    var userProfile = JSON.parse(localStorage.getItem('profile'));
 
     useEffect(()=>{
-        if(userProfile.groupId !== null || userProfile.groupId !== ""){
+        if( userProfile.groupId && userProfile.groupId !== null && userProfile.groupId !== ""){
             
             fetchGroup(userProfile.groupId)
             .then(response=>{
@@ -49,9 +49,9 @@ const MyGroup = ({history}) => {
             else{
                 // localStorage.setItem
                 // user.grou
-                var userProfile = JSON.parse(localStorage.getItem('studentProfile'));
+                var userProfile = JSON.parse(localStorage.getItem('profile'));
                 userProfile.groupId = response.data.data.group._id;
-                localStorage.setItem("studentProfile",JSON.stringify(userProfile)) ;
+                localStorage.setItem("profile",JSON.stringify(userProfile)) ;
                 console.log(response.data.data);
                 history.push("home");
 

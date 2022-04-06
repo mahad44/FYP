@@ -2,6 +2,7 @@ import { useParams } from 'react-router';
 import { useState, useEffect } from 'react';
 import Spinner from './../Components/Spinner';
 import { fetchUser } from "../API calls/users";
+import { createRequest } from "../API calls/request"
 
 
 
@@ -12,7 +13,7 @@ const FacultyProfile = () => {
     const [profile,setProfile] = useState([]);
     const [responseRecieved, setResponseRecieved] = useState(false);
     const [requestSent,setRequestSent] = useState(false);
-    var userProfile = JSON.parse(localStorage.getItem('studentProfile'));
+    var userProfile = JSON.parse(localStorage.getItem('profile'));
 
     useEffect(() => {
         let data = {
@@ -35,25 +36,25 @@ const FacultyProfile = () => {
     }, []);
 
     const sendRequest = async => {
-        // console.log("button clicked");
-        // let data = {
-        //     groupId: userProfile.groupId,
-        //     recieverId: user._id,
-        //     requestType: "peer",
-        //     proposalFile: "",
-        //     message: "hey"
-        // }
+        console.log("button clicked");
+        let data = {
+            groupId: userProfile.groupId,
+            recieverId: user._id,
+            requestType: "supervisor",
+            proposalFile: "",
+            message: "hey"
+        }
 
-        // createRequest(data)
-        // .then(response=> {
-        //     if(response.status !== 200){
-        //         alert('Unable to send request');
-        //     }
-        //     else{
-        //         setRequestSent(true);
+        createRequest(data)
+        .then(response=> {
+            if(response.status !== 200){
+                alert('Unable to send request');
+            }
+            else{
+                setRequestSent(true);
 
-        //     }
-        // })
+            }
+        })
     }
 
     return ( 

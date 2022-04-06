@@ -4,8 +4,9 @@ import {Modal,ModalHeader,ModalBody,Button,ModalFooter } from "reactstrap";
 
 const RequestCard = (props) => {
 
-    const {id, type, recieverName, status, history, onCancel, recieverId} = props;
+    const {id, type,senderName,senderId, recieverName, status, history, onCancel, onAccept, recieverId} = props;
     const [boolean, setBoolean] = useState(false);
+    var userProfile = JSON.parse(localStorage.getItem('profile'));
 
 
     function noRefCheck(){
@@ -21,17 +22,21 @@ const RequestCard = (props) => {
         noRefCheck();
     }
 
-    return ( 
-        <div className="row p-2 align-items-center m-2 w-75 text-light bg-dark" style={{borderRadius: "25px", textAlign: "center"}}>
+    return (
+        <>
+        <div className={type==="peer" ? "row p-2 align-items-center m-2 w-75 text-light bg-dark" : "row p-2 align-items-center m-2 w-75 border border-dark" } style={{borderRadius: "25px", textAlign: "center"}}>
             <div className="col-3">
                 {type.charAt(0).toUpperCase() + type.slice(1)}
             </div>
-            <div className="col-3">
+            {userProfile.userId !== recieverId ? <div className="col-3">
                 Sent to <strong>{recieverName}</strong>
-            </div>
+            </div> : <div className="col-3">
+                Recieved from <strong>{senderName}</strong>
+            </div> }
             <div className="col-3">
-                <button onClick={cancel} className="btn btn-danger">Cancel</button>
-                <button onClick={()=>history.push(`/users/${recieverId}`)} className="btn btn-primary">View Profile</button>
+                {status === "pending" && userProfile.userId === recieverId && <button onClick={()=>onAccept(id)} className="btn btn-success">Accept</button>}
+                {status === "pending" && <button onClick={type==="peer" ?  userProfile.userId===recieverId ? ()=>history.push(`/groups/${senderId}`) : ()=>history.push(`/users/${recieverId}`) : ()=>history.push(`/faculty/${recieverId}`) } className="btn btn-primary">View Profile</button>}
+                {status === "pending" && <button onClick={cancel} className="btn btn-danger">Cancel</button>}
                 <Modal isOpen={boolean} toggle={function noRefCheck() {}}>
                 <ModalHeader toggle={()=> noRefCheck()}>
                   Confirmation
@@ -50,8 +55,8 @@ const RequestCard = (props) => {
             <div className="col-3">
                 {status.charAt(0).toUpperCase() + status.slice(1)}
             </div>
-
         </div>
+        </> 
     );
 }
  

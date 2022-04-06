@@ -20,4 +20,8 @@ export const fetchRecievedRequests = async userId =>
 export const cancelRequest = async requestId =>
     await axios.get(`http://localhost:5000/requests/cancelRequest/${requestId}`,header);
 
+//Fetches sent requests for the user
+export const acceptRequest = async requestId =>
+await axios.get(`http://localhost:5000/requests/acceptRequest/${requestId}`,header);
+
 

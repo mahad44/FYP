@@ -10,6 +10,9 @@ import Peers from './pages/Peers';
 import UserDetails from './pages/UserDetails';
 import ViewRequests from './pages/ViewRequests';
 import FacultyProfile from './pages/FacultyProfile';
+import FacultyGroupsView from './pages/FacultyGroupsView';
+import FacultyRequestsView from './pages/FacultyRequestsView';
+import GroupView from './pages/GroupView';
 
 
 function App() {
@@ -26,6 +29,9 @@ function App() {
         <Route path="/mygroup">
           <MyGroup/>
         </Route>
+        <Route path="/groups/:groupId">
+          <GroupView/>
+        </Route>
         <Route path="/createGroup">
           <CreateGroup/>
         </Route>
@@ -38,9 +44,16 @@ function App() {
         <Route path="/peers">
           <Peers/>
         </Route>
+        {localStorage.getItem("userType")==="student" ? 
         <Route path="/requests">
           <ViewRequests/>
-        </Route>
+        </Route> : 
+        <Route path="/requests">
+          <FacultyRequestsView />
+        </Route> }
+        {localStorage.getItem("userType")==="faculty" && <Route path="/mygroups">
+          <FacultyGroupsView/>
+        </Route>}
         <Route path="/users/:userId">
           <UserDetails/>
         </Route>
