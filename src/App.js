@@ -13,16 +13,28 @@ import FacultyProfile from './pages/FacultyProfile';
 import FacultyGroupsView from './pages/FacultyGroupsView';
 import FacultyRequestsView from './pages/FacultyRequestsView';
 import GroupView from './pages/GroupView';
+import StudentFormNew from './pages/StudentFormNew';
+import UpdateProfileView from './pages/UpdateProfileView';
+
 
 
 function App() {
   return (
     <div className="App">
       <Navbar />
+      
+       
+      {JSON.parse(localStorage.getItem("profile"))?.isProfileSet===false ?
+      <Route>
+      <StudentFormNew/>
+      </Route>:
       <Switch>
         <Route path="/login">
           <Login/>
-        </Route>
+       </Route>
+      <Route path="/home">
+        <Home/>
+      </Route>  
         {<Route path="/home">
           <Home/>
         </Route>}
@@ -40,6 +52,9 @@ function App() {
         </Route>
         <Route path="/faculty">
           <FacultyList/>
+        </Route>
+        <Route path="/profile">
+          <UpdateProfileView />
         </Route>
         <Route path="/peers">
           <Peers/>
@@ -61,7 +76,7 @@ function App() {
           <Login/>
         </Route>}
         <Redirect push to="/home" />
-      </Switch>
+      </Switch>}
     </div>
   );
 }

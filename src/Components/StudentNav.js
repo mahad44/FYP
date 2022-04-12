@@ -51,6 +51,11 @@ const StudentNav = props => {
                         Peers
                     </NavLink>
                 </li>
+                <li className="nav-item">
+                    <NavLink className="nav-link" to="/profile">
+                        Profile
+                    </NavLink>
+                </li>
                 <li>
                     <hr className="dropdown-divider" />
                 </li>

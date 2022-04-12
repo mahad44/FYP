@@ -13,6 +13,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 
 function HomeComponent() {
+  console.log(JSON.parse(localStorage.getItem("profile")).isProfileSet)
+  console.log(localStorage.getItem("user"))
+
     return (
       <div class="display">
          <div class="row1">

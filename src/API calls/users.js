@@ -18,3 +18,7 @@ export const fetchStudents = async data =>
 //fetches the profile of user
 export const fetchUser = async (data,userId) =>
     await axios.post(`http://localhost:5000/users/fetchUser/${userId}`,data, header);
+
+
+export const updateStudents = async data =>
+    await axios.post(`http://localhost:5000/users/updateStudentUser`,data, header);
